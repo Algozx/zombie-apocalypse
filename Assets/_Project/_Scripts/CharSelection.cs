@@ -11,25 +11,27 @@ public class CharSelection : MonoBehaviour
 
     private void Start()
     {
-        Index = PlayerPrefs.GetInt("PlayerSelected");
-
-        PlayerSkins = new GameObject[transform.childCount];
-
-        //Preenchendo os arrays
+        //Só os filhos com modelo (SkinnedMeshRenderer) são personagens. Os demais (esqueleto com a arma,
+        //cano da arma, canvas de vida) precisam continuar ativos e não podem entrar na seleção.
+        var skins = new List<GameObject>();
         for (int i = 0; i < transform.childCount; i++)
-            PlayerSkins[i] = transform.GetChild(i).gameObject;
+        {
+            Transform child = transform.GetChild(i);
+            if (child.GetComponentInChildren<SkinnedMeshRenderer>(true) != null)
+                skins.Add(child.gameObject);
+        }
+        PlayerSkins = skins.ToArray();
+
+        if (PlayerSkins.Length == 0) return;
+
+        Index = Mathf.Clamp(PlayerPrefs.GetInt("PlayerSelected"), 0, PlayerSkins.Length - 1);
 
         //Desligando a renderização dos modelos.
         foreach (GameObject go in PlayerSkins)
             go.SetActive(false);
 
-
-        //Ligando o primeiro Index
-        if (PlayerSkins[Index])
-        {
-            PlayerSkins[Index].SetActive(true);
-            PlayerSkins[0].SetActive(true);
-        }
+        //Ligando o Index escolhido
+        PlayerSkins[Index].SetActive(true);
     }
 
     public void Voltar()
@@ -63,5 +65,5 @@ public class CharSelection : MonoBehaviour
         PlayerPrefs.SetInt("PlayerSelected", Index);
     }
 
-    
+
 }

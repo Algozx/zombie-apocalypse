@@ -46,12 +46,23 @@ public class Movement : MonoBehaviour
     }
     
     /// <summary>
+    /// Call this function to turn the character towards a direction without triggering the shooting.
+    /// </summary>
+    public void Face(Vector3 direction)
+    {
+        if (direction != Vector3.zero)
+        {
+            _rb.MoveRotation(Quaternion.LookRotation(direction));
+        }
+    }
+
+    /// <summary>
     /// Call this function to stop character from moving after being dead.
     /// </summary>v
     public void Die()
     {
         _rb.constraints = RigidbodyConstraints.None;
-        _rb.velocity = Vector3.zero;
+        _rb.linearVelocity = Vector3.zero;
         _rb.isKinematic = false;
         GetComponent<Collider>().enabled = false;
     }

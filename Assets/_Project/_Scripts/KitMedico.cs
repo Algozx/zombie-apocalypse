@@ -13,7 +13,7 @@ public class KitMedico : MonoBehaviour
     }
     public void OnTriggerEnter(Collider objetoDeColisao)
     {
-        if (objetoDeColisao.tag == "Jogador")
+        if (objetoDeColisao.CompareTag("Player"))
         {
             Destroy(gameObject);
             objetoDeColisao.GetComponent<PlayerController>().Heal(quantidadeDeCura);

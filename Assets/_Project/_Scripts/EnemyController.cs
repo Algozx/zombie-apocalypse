@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Movement), typeof(Status))]
 public class EnemyController : MonoBehaviour, InterfaceFuncoes
 {
-    public EventHandler OnZombieKill;
+    public static event EventHandler OnZombieKill;
     
     [SerializeField] public ZombieSpawner spawner;
     
@@ -28,7 +28,7 @@ public class EnemyController : MonoBehaviour, InterfaceFuncoes
     void Start()
     {
         _player = GameObject.FindWithTag("Player");
-        _interfaceController = GameObject.FindObjectOfType(typeof(InterfaceController)) as InterfaceController;
+        _interfaceController = FindAnyObjectByType<InterfaceController>();
         RandomZombieSkin();
     }
 

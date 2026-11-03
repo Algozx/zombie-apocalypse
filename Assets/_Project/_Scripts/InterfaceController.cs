@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Zombie.DataEvent;
@@ -33,22 +34,22 @@ public class InterfaceController : MonoBehaviour
     private int _deadZombies;
     private int _highestDeadZombies;
     private AudioSource scriptAudioSource;
-    private EnemyController _enemyController;
     private BossController _bossController;
     private float _highestSavedTimer;
     void Start()
     {
-        _bossController = GameObject.FindWithTag("Boss").GetComponent<BossController>();
-        _enemyController = GameObject.FindWithTag("Enemy").GetComponent<EnemyController>();
-        scriptAudioSource = GameObject.FindObjectOfType(typeof(AudioSource)) as AudioSource;
+        scriptAudioSource = FindAnyObjectByType<AudioSource>();
         Time.timeScale = 1;
         _highestSavedTimer = PlayerPrefs.GetFloat("highestScore");
         _highestDeadZombies = PlayerPrefs.GetInt("highestDeadZombies");
         
         bossSpawner.OnBossSpawn += OnBossSpawn;
-        _enemyController.OnZombieKill += OnZombieKill;
-        _bossController.OnBossTookDamage += OnBossTookDamage;
-        _bossController.OnBossDied += OnBossDied;
+        EnemyController.OnZombieKill += OnZombieKill;
+    }
+
+    private void OnDestroy()
+    {
+        EnemyController.OnZombieKill -= OnZombieKill;
     }
 
     private void OnBossDied(object sender, EventArgs e)
@@ -68,6 +69,11 @@ public class InterfaceController : MonoBehaviour
 
     private void OnBossSpawn(object sender, EventArgs e)
     {
+        // O Boss é instanciado em runtime, então só dá para assinar os eventos dele agora.
+        _bossController = GameObject.FindWithTag("Boss").GetComponent<BossController>();
+        _bossController.OnBossTookDamage += OnBossTookDamage;
+        _bossController.OnBossDied += OnBossDied;
+
         ShowBossSpawnText();
         sliderGameObject.SetActive(true);
     }
@@ -176,7 +182,10 @@ public class InterfaceController : MonoBehaviour
 
     private void Pause()
     {
-        if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape))
+        var keyboard = Keyboard.current;
+        if (keyboard == null) return;
+
+        if (keyboard.pKey.wasPressedThisFrame || keyboard.escapeKey.wasPressedThisFrame)
         {
             Time.timeScale = 0;
             pausePanel.SetActive(true);
@@ -196,15 +205,5 @@ public class InterfaceController : MonoBehaviour
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
-    }
-
-    private void OnEnable()
-    {
-        DataEvent.Notify();
-    }
-
-    private void OnDisable()
-    {
-        throw new NotImplementedException();
     }
 }

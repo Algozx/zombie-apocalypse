@@ -110,7 +110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rBullet: {fileID: -8831609826519407362}
-  bulletSpeed: 5
+  bulletSpeed: 30
   shotDamage: 1
 --- !u!54 &-8831609826519407362
 Rigidbody:
