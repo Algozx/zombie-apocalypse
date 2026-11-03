@@ -3283,7 +3283,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: JOGAR
+  m_Text: PLAY
 --- !u!222 &1045280691
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3631,7 +3631,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: SAIR
+  m_Text: QUIT
 --- !u!222 &1289972792
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4916,7 +4916,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: CONFIRMAR
+  m_Text: CONFIRM
 --- !u!222 &1618955831
 CanvasRenderer:
   m_ObjectHideFlags: 0
